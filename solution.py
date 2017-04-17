@@ -75,7 +75,26 @@ def display(values):
     Args:
         values(dict): The sudoku in dictionary form
     """
-    pass
+    width = 1 + max( len(values[box]) for box in BOXES )
+
+    def printable_row(row):
+        digits = [ values[ row + col ].center(width) for col in COLS ]
+        digits.insert(+3, '|') # Add first separator
+        digits.insert(-3, '|') # Add last  separator
+        return ''.join(digits)
+
+    def horizontal_separator():
+        item   = '-' * width
+        group  = item * 3
+        groups = [ group ] * 3
+        return '+'.join(groups)
+
+    rows = list(map(printable_row, ROWS))
+    rows.insert(+3, horizontal_separator()) # Add first separator
+    rows.insert(-3, horizontal_separator()) # Add last  separator
+
+    board = "\n".join(rows)
+    print(board)
 
 def eliminate(values):
     pass
