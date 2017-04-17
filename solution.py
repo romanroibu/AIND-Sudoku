@@ -143,6 +143,15 @@ def naked_twins(values):
     """
     return naked_n_tuple(values, n=2)
 
+def naked_triplets(values):
+    """Eliminate values using the naked triplets strategy.
+    Args:
+        values(dict): a dictionary of the form {'box_name': '123456789', ...}
+    Returns:
+        the values dictionary with the naked triplets eliminated from peers.
+    """
+    return naked_n_tuple(values, n=3)
+
 def naked_n_tuple(values, n):
     """Eliminate values using the naked n-tuple strategy.
     Args:
@@ -200,6 +209,9 @@ def reduce_puzzle(values):
 
         # Use the Naked Twins Stategy
         values = naked_twins(values)
+
+        # Use the Naked Triplets Stategy
+        values = naked_triplets(values)
 
         # Check how many boxes have a determined value, to compare
         solved_values_after = count_boxes(values)
