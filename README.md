@@ -7,7 +7,7 @@ A: We enforce the "naked twins" rule by finding a pair of boxes with the same tw
 
 # Question 2 (Diagonal Sudoku)
 Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
-A: *Student should provide answer here*
+A: By enforcing the diagonal sudoku rule that the two main diagonals should have all values from 1 to 9, we reduce the number of possible values the boxes in the diagonals can have on each iteration.
 
 ### Install
 
