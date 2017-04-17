@@ -174,6 +174,14 @@ def solve(grid):
         The dictionary representation of the final sudoku grid. False if no solution exists.
     """
 
+    # Parse grind string into a sudoku grid dictionary representation
+    sudoku = grid_values(grid)
+
+    # Solve the sudoku by searching for a solution
+    solution = search(sudoku)
+
+    return solution
+
 if __name__ == '__main__':
     diag_sudoku_grid = '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
     display(solve(diag_sudoku_grid))
