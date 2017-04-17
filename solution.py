@@ -97,7 +97,27 @@ def display(values):
     print(board)
 
 def eliminate(values):
-    pass
+    """Eliminate values from peers of each box with a single value.
+
+    Go through all the boxes, and whenever there is a box with a single value,
+    eliminate this value from the set of values of all its peers.
+
+    Args:
+        values(dict): a dictionary of the form {'box_name': '123456789', ...}
+    Returns:
+        the values dictionary with the value eliminated from peers.
+    """
+
+    # Get a list of all solved boxes and their values
+    solved_boxes = [ (box, value) for box, value in values.items() if len(value) == 1 ]
+
+    # For every solved box
+    for box, value in solved_boxes:
+        # Remove the box's value from every peer of the box
+        for peer in PEERS[box]:
+            values = remove_value(values, peer, value)
+
+    return values
 
 def only_choice(values):
     pass
@@ -113,7 +133,8 @@ def reduce_puzzle(values):
         # Check how many boxes have a determined value
         solved_values_before = count_boxes(values)
 
-        # TODO: Enforce constarints here...
+        # Use the Eliminate Strategy
+        values = eliminate(values)
 
         # Check how many boxes have a determined value, to compare
         solved_values_after = count_boxes(values)
