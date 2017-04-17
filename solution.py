@@ -15,6 +15,14 @@ def assign_value(values, box, value):
         assignments.append(values.copy())
     return values
 
+def remove_value(values, box, remove_value):
+    new_value = values[box]
+
+    for char in remove_value:
+        new_value = new_value.replace(char, '')
+
+    return assign_value(values, box, new_value)
+
 def naked_twins(values):
     """Eliminate values using the naked twins strategy.
     Args:
