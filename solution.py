@@ -141,6 +141,15 @@ def naked_twins(values):
     Returns:
         the values dictionary with the naked twins eliminated from peers.
     """
+    return naked_n_tuple(values, n=2)
+
+def naked_n_tuple(values, n):
+    """Eliminate values using the naked n-tuple strategy.
+    Args:
+        values(dict): a dictionary of the form {'box_name': '123456789', ...}
+    Returns:
+        the values dictionary with the naked n-tuple eliminated from peers.
+    """
 
     def find_tuples(unit):
         # Dictionary of the form {'27': ['G8', 'G9'] }
@@ -149,7 +158,7 @@ def naked_twins(values):
         occurrences = {}
 
         # Get the boxes that should be added to the occurrences dict
-        candidate_boxes = [ (box, values[box]) for box in unit if len(values[box]) == 2 ]
+        candidate_boxes = [ (box, values[box]) for box in unit if len(values[box]) == n ]
 
         # For every box, add it to the occurrences dict
         for box, value in candidate_boxes:
@@ -159,15 +168,15 @@ def naked_twins(values):
 
         # Return dictionary of the form {'27': ('G8', 'G9') }
         # The key is the box value
-        # The value is a tuple of 2 boxes that have the same value
-        return dict( (value, tuple(boxes)) for value, boxes in occurrences.items() if len(boxes) == 2 )
+        # The value is a tuple of `n` boxes that have the same value
+        return dict( (value, tuple(boxes)) for value, boxes in occurrences.items() if len(boxes) == n )
 
-    # Find all instances of naked twins in all units
+    # Find all instances of naked n-tuples in all units
     for unit in UNIT_LIST:
-        for value, twin_tuple in find_tuples(unit).items():
-            # Eliminate the naked twins as possibilities for their peers
+        for value, n_tuple in find_tuples(unit).items():
+            # Eliminate the naked n-tuples as possibilities for their peers
             for box in unit:
-                if not box in twin_tuple:
+                if not box in n_tuple:
                     values = remove_value(values, box, value)
 
     return values
