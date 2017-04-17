@@ -120,7 +120,31 @@ def eliminate(values):
     return values
 
 def only_choice(values):
-    pass
+    """Finalize all values that are the only choice for a unit.
+
+    Go through all the UNITS, and whenever there is a unit with a value
+    that only fits in one box, assign the value to this box.
+
+    Args:
+        values(dict): a dictionary of the form {'box_name': '123456789', ...}
+    Returns:
+        the values dictionary with the values after filling in only choices.
+    """
+
+    all_digits = '123456789'
+
+    # For each unit in unit list, check every digit
+    for unit in UNIT_LIST:
+        for digit in all_digits:
+            # Find the boxes that have this digit as part of their value
+            digit_occurrences = [ box for box in unit if digit in values[box] ]
+            # If there is only one box with this digit as part of their value
+            if len(digit_occurrences) == 1:
+                # Assign this digit as the whole value of this box
+                box = digit_occurrences[0]
+                values = assign_value(values, box, digit)
+
+    return values
 
 def reduce_puzzle(values):
     halt = False
@@ -135,6 +159,9 @@ def reduce_puzzle(values):
 
         # Use the Eliminate Strategy
         values = eliminate(values)
+
+        # Use the Only Choice Strategy
+        values = only_choice(values)
 
         # Check how many boxes have a determined value, to compare
         solved_values_after = count_boxes(values)
