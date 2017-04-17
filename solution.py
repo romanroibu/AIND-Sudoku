@@ -103,7 +103,29 @@ def only_choice(values):
     pass
 
 def reduce_puzzle(values):
-    pass
+    halt = False
+
+    # Function for counting boxes with `value_count` number of values
+    def count_boxes(values, value_count=1):
+        return len([ box for box, value in values.items() if len(value) == value_count ])
+
+    while not halt:
+        # Check how many boxes have a determined value
+        solved_values_before = count_boxes(values)
+
+        # TODO: Enforce constarints here...
+
+        # Check how many boxes have a determined value, to compare
+        solved_values_after = count_boxes(values)
+
+        # If no new values were added, stop the loop
+        halt = solved_values_before == solved_values_after
+
+        # Sanity check, return False if there is a box with zero available values
+        if count_boxes(values, value_count=0):
+            return False
+
+    return values
 
 def search(values):
     pass
