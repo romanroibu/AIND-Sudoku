@@ -39,6 +39,22 @@ def cross(A, B):
     "Cross product of elements in A and elements in B."
     return [ a + b for a in A for b in B ]
 
+ROWS  = 'ABCDEFGHI'
+COLS  = '123456789'
+BOXES = cross(ROWS, COLS)
+
+ROW_UNITS = [ cross(r, COLS) for r in ROWS ]
+COL_UNITS = [ cross(ROWS, c) for c in COLS ]
+SQUARE_UNITS = [ cross(rs, cs) for rs in ('ABC','DEF','GHI') for cs in ('123','456','789') ]
+
+DIAGONAL_UNIT1 = [ r + c for r, c in zip(ROWS, COLS) ]
+DIAGONAL_UNIT2 = [ r + c for r, c in zip(ROWS, reversed(COLS)) ]
+DIAGONAL_UNITS = [ DIAGONAL_UNIT1, DIAGONAL_UNIT2 ]
+
+UNIT_LIST = ROW_UNITS + COL_UNITS + SQUARE_UNITS + DIAGONAL_UNITS
+UNITS = dict( (box, [ unit for unit in UNIT_LIST if box in unit ]) for box in BOXES)
+PEERS = dict( (box, set(sum(UNITS[box],[])) - set([box])) for box in BOXES)
+
 def grid_values(grid):
     """
     Convert grid into a dict of {square: char} with '123456789' for empties.
