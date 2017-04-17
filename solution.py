@@ -23,18 +23,6 @@ def remove_value(values, box, remove_value):
 
     return assign_value(values, box, new_value)
 
-def naked_twins(values):
-    """Eliminate values using the naked twins strategy.
-    Args:
-        values(dict): a dictionary of the form {'box_name': '123456789', ...}
-
-    Returns:
-        the values dictionary with the naked twins eliminated from peers.
-    """
-
-    # Find all instances of naked twins
-    # Eliminate the naked twins as possibilities for their peers
-
 def cross(A, B):
     "Cross product of elements in A and elements in B."
     return [ a + b for a in A for b in B ]
@@ -146,6 +134,44 @@ def only_choice(values):
 
     return values
 
+def naked_twins(values):
+    """Eliminate values using the naked twins strategy.
+    Args:
+        values(dict): a dictionary of the form {'box_name': '123456789', ...}
+    Returns:
+        the values dictionary with the naked twins eliminated from peers.
+    """
+
+    def find_tuples(unit):
+        # Dictionary of the form {'27': ['G8', 'G9'] }
+        # The key is the box value
+        # The value is a list of boxes that have the same value
+        occurrences = {}
+
+        # Get the boxes that should be added to the occurrences dict
+        candidate_boxes = [ (box, values[box]) for box in unit if len(values[box]) == 2 ]
+
+        # For every box, add it to the occurrences dict
+        for box, value in candidate_boxes:
+            occurrence_list = occurrences.get(value, [])
+            occurrence_list = occurrence_list + [ box ]
+            occurrences[value] = occurrence_list
+
+        # Return dictionary of the form {'27': ('G8', 'G9') }
+        # The key is the box value
+        # The value is a tuple of 2 boxes that have the same value
+        return dict( (value, tuple(boxes)) for value, boxes in occurrences.items() if len(boxes) == 2 )
+
+    # Find all instances of naked twins in all units
+    for unit in UNIT_LIST:
+        for value, twin_tuple in find_tuples(unit).items():
+            # Eliminate the naked twins as possibilities for their peers
+            for box in unit:
+                if not box in twin_tuple:
+                    values = remove_value(values, box, value)
+
+    return values
+
 def reduce_puzzle(values):
     halt = False
 
@@ -162,6 +188,9 @@ def reduce_puzzle(values):
 
         # Use the Only Choice Strategy
         values = only_choice(values)
+
+        # Use the Naked Twins Stategy
+        values = naked_twins(values)
 
         # Check how many boxes have a determined value, to compare
         solved_values_after = count_boxes(values)
