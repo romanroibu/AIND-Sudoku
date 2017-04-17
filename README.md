@@ -3,7 +3,7 @@
 
 # Question 1 (Naked Twins)
 Q: How do we use constraint propagation to solve the naked twins problem?  
-A: *Student should provide answer here*
+A: We enforce the "naked twins" rule by finding a pair of boxes with the same two possible values, and removing those values from all the other boxes in the same unit (row, column, 3x3 square or diagonal), thus narrowing the space of possible values for those boxes. By repeatedly applying this constraint (as well as elimination, and only choice rules) we reduce the search space on every iteration and ultimately arrive to a solution.
 
 # Question 2 (Diagonal Sudoku)
 Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
