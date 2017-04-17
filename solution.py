@@ -128,7 +128,41 @@ def reduce_puzzle(values):
     return values
 
 def search(values):
-    pass
+    """Using depth-first search and propagation, create a search tree and solve the sudoku.
+    Args:
+        values(dict): a dictionary of the form {'box_name': '123456789', ...}
+    Returns:
+        the values dictionary with the naked twins eliminated from PEERS.
+    """
+
+    # Reduce the puzzle the search space by enforcing constraints
+    values = reduce_puzzle(values)
+
+    # If the solution is invalid, return False
+    if values is False:
+        return False
+
+    # If all boxes are solved, return the values
+    if all(len(values[box]) == 1 for box in BOXES):
+        return values
+
+    # Choose one of the unfilled squares with the fewest possibilities
+    unsolved_values = [ item for item in values.items() if len(item[1]) > 1 ]
+    box, choices = min(unsolved_values, key=lambda item: len(item[1]))
+
+    # For every possibile value of box
+    for value in choices:
+        # Create a new sudoku game by picking that value for the box
+        new_values = values.copy()
+        new_values[box] = value
+
+        # Recursively search the game with picked value
+        solution = search(new_values)
+
+        # If picked value yelds a solution
+        # Return that solution
+        if solution:
+            return solution
 
 def solve(grid):
     """
